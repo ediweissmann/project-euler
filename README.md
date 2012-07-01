@@ -3,5 +3,5 @@ Scala solutions to projecteuler.net problems
 
 To run a problem:
 
-  >sbt 
+  >laptop $sbt 
   >run P11
