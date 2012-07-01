@@ -1,4 +1,6 @@
-project-euler
+Scala solutions to projecteuler.net problems
 =============
 
-Scala solutions to projecteuler.net problems
+To run a problem:
+
+  >sbt run P11
