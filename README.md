@@ -1,4 +1,4 @@
 project-euler
 =============
 
-Solutions to projecteuler.net problems
+Scala solutions to projecteuler.net problems
