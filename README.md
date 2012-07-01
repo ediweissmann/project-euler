@@ -1,7 +1,7 @@
 Scala solutions to projecteuler.net problems
 =============
 
-To run a problem:
+To run a problem (eg: P11):
 
-  >laptop $sbt 
-  >run P11
+    >$sbt 
+    >run P11
