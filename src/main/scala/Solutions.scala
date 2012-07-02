@@ -1,5 +1,47 @@
 package net.projecteuler.ediweissmann
 
+import annotation.tailrec
+
+/*
+The following iterative sequence is defined for the set of positive integers:
+
+n  n/2 (n is even)
+n  3n + 1 (n is odd)
+
+Using the rule above and starting with 13, we generate the following sequence:
+
+13  40  20  10  5  16  8  4  2  1
+It can be seen that this sequence (starting at 13 and finishing at 1) contains 10 terms. Although it has not been proved yet (Collatz Problem), it is thought that all starting numbers finish at 1.
+
+Which starting number, under one million, produces the longest chain?
+
+NOTE: Once the chain starts the terms are allowed to go above one million.
+ */
+object P14 extends Solvable {
+
+  import Numbers._
+
+  def solve() = {
+
+    /*
+     * Computes size of collatz sequence
+     */
+    @tailrec
+    def collatzSeqSize(n: Long, size:Long = 1): Long = {
+      if (n == 1) size
+      else {
+        val next = if (n % 2 == 0) n / 2 else 3 * n + 1
+        collatzSeqSize(next, size + 1)
+      }
+    }
+
+    // see http://en.wikipedia.org/wiki/Memoization
+    def collatzMemoized = Memoize2(collatzSeqSize)
+
+    numbers(1, 1000000).par.map(n => (n, collatzMemoized(n, 1))).maxBy(_._2)
+  }
+}
+
 /*
 Work out the first ten digits of the sum of the following one-hundred 50-digit numbers.
  */
@@ -7,7 +49,7 @@ object P13 extends Solvable {
 
   def solve() = {
     val in =
-    """37107287533902102798797998220837590246510135740250
+      """37107287533902102798797998220837590246510135740250
        46376937677490009712648124896970078050417018260538
        74324986199524741059474233309513058123726617309629
        91942213363574161572522430563301811072406154908250
@@ -107,7 +149,7 @@ object P13 extends Solvable {
        72107838435069186155435662884062257473692284509516
        20849603980134001723930671666823555245252804609722
        53503534226472524250874054075591789781264330331690"""
-    .lines.map(l => BigInt(l.trim))
+        .lines.map(l => BigInt(l.trim))
 
 
     in.reduce(_ + _).toString.take(10)
@@ -277,6 +319,11 @@ object P10 extends Solvable {
   }
 }
 
+object Numbers {
+
+  def numbers(from:Int, to:Int):Stream[Int] = Stream.cons(from, if (from == to) Stream.empty else numbers(from + 1, to))
+}
+
 object TriangleNumbers {
   def triangleNumbers(): Stream[BigInt] = triangleNumbers(1)
 
@@ -285,7 +332,7 @@ object TriangleNumbers {
 
 object Factors {
 
-  def factors(n: BigInt) = 1.until(scala.math.sqrt(n.toInt).toInt+1).par.filter(n % _ == 0).map(i => Seq(i, n / i)).flatten.toSet
+  def factors(n: BigInt) = 1.until(scala.math.sqrt(n.toInt).toInt + 1).par.filter(n % _ == 0).map(i => Seq(i, n / i)).flatten.toSet
 }
 
 object Primes {
