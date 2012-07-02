@@ -2,18 +2,13 @@ package net.projecteuler.ediweissmann
 
 import scala.Array
 
-/*
- The sum 0f the primes below 10 is 2 + 3 + 5 + 7 = 17.
- Find the sum 0f all the primes below tw0 million.
- */
-object P10 extends Solvable {
+object P12 extends Solvable {
 
-  import Primes._
-
-  val TWO_MILLION = 2 * 1000000
+  import TriangleNumbers._
+  import Factors._
 
   def solve() = {
-    probablePrimes() takeWhile (_ < TWO_MILLION) reduce (_ + _)
+    triangleNumbers() find (factors(_).size > 500)
   }
 }
 
@@ -111,6 +106,7 @@ object P11 extends Solvable {
                     val direction: String) extends Ordered[PlotProduct] {
 
     override def compare(that: PlotProduct) = value.compareTo(that.value)
+
     override def toString = "%d => [%d,%d](%s)".format(value, plot.x, plot.y, direction)
   }
 
@@ -136,11 +132,39 @@ object P11 extends Solvable {
   }
 }
 
+/*
+ The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
+ Find the sum of all the primes below two million.
+ */
+object P10 extends Solvable {
+
+  import Primes._
+
+  val TWO_MILLION = 2 * 1000000
+
+  def solve() = {
+    probablePrimesTo(TWO_MILLION) reduce (_ + _)
+  }
+}
+
+object TriangleNumbers {
+  def triangleNumbers(): Stream[BigInt] = triangleNumbers(1)
+
+  private def triangleNumbers(n: Int, sum: Int = 0): Stream[BigInt] = Stream.cons(n + sum, triangleNumbers(n + 1, n + sum))
+}
+
+object Factors {
+
+  def factors(n: BigInt) = 1.until(scala.math.sqrt(n.toInt).toInt+1).par.filter(n % _ == 0).map(i => Seq(i, n / i)).flatten.toSet
+}
+
 object Primes {
 
   import Conversions._
 
-  def probablePrimes() = probablePrimesFrom(2)
+  def probablePrimes() = probablePrimesFrom(1)
 
   def probablePrimesFrom(n: BigInt): Stream[BigInt] = Stream.cons(n, probablePrimesFrom(n.nextProbablePrime))
+
+  def probablePrimesTo(n: BigInt): Stream[BigInt] = probablePrimes() takeWhile (_ <= n)
 }
