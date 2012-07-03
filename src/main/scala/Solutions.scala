@@ -3,6 +3,34 @@ package net.projecteuler.ediweissmann
 import annotation.tailrec
 
 /*
+Starting in the top left corner of a 22 grid, there are 6 routes (without backtracking, going only right or down)
+to the bottom right corner.
+How many routes are there through a 2020 grid?
+ */
+object P15 extends Solvable {
+
+  def solve() = {
+
+    /*
+     * Calculates number of possible routes to (i, j) from (0, 0)
+     * Memoized recursive for speed
+     */
+    def routesRec(memoizedSelf: (Int, Int) => BigInt)(i: Int, j: Int): BigInt = {
+      (i, j) match {
+        case (any, 0) => 1
+        case (0, any) => 1
+        case (a, b) if a == b => 2 * memoizedSelf(a, b - 1)
+        case (a, b) => memoizedSelf(a, b - 1) + memoizedSelf(a - 1, b)
+      }
+    }
+
+    val routes: (Int, Int) => BigInt = Memoize2.Y(routesRec)
+
+    routes(20, 20)
+  }
+}
+
+/*
 The following iterative sequence is defined for the set of positive integers:
 
 n  n/2 (n is even)
@@ -27,7 +55,7 @@ object P14 extends Solvable {
      * Computes size of collatz sequence
      */
     @tailrec
-    def collatzSeqSize(n: Long, size:Long = 1): Long = {
+    def collatzSeqSize(n: Long, size: Long = 1): Long = {
       if (n == 1) size
       else {
         val next = if (n % 2 == 0) n / 2 else 3 * n + 1
@@ -36,7 +64,7 @@ object P14 extends Solvable {
     }
 
     // see http://en.wikipedia.org/wiki/Memoization
-    def collatzMemoized = Memoize2(collatzSeqSize)
+    def collatzMemoized = Memoize2i(collatzSeqSize)
 
     numbers(1, 1000000).par.map(n => (n, collatzMemoized(n, 1))).maxBy(_._2)
   }
@@ -321,7 +349,7 @@ object P10 extends Solvable {
 
 object Numbers {
 
-  def numbers(from:Int, to:Int):Stream[Int] = Stream.cons(from, if (from == to) Stream.empty else numbers(from + 1, to))
+  def numbers(from: Int, to: Int): Stream[Int] = Stream.cons(from, if (from == to) Stream.empty else numbers(from + 1, to))
 }
 
 object TriangleNumbers {
