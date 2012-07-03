@@ -6,24 +6,6 @@ package net.projecteuler.ediweissmann
  */
 
 /**
- * Memoize a f(x, any) by ignoring second parameter value
- */
-class Memoize2i[-T, -U, +R](f: (T, U) => R) extends ((T, U) => R) {
-
-  import scala.collection.mutable
-
-  private[this] val vals = mutable.Map.empty[T, R]
-
-  def apply(x: T, a: U): R = {
-    vals.getOrElseUpdate(x, f(x, a))
-  }
-}
-
-object Memoize2i {
-  def apply[T, U, R](f: (T, U) => R) = new Memoize2i(f)
-}
-
-/**
  * Memoize f(a, b)
  */
 class Memoize2[-T, -U, +R](f: (T, U) => R) extends ((T, U) => R) {

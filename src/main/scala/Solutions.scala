@@ -63,10 +63,7 @@ object P14 extends Solvable {
       }
     }
 
-    // see http://en.wikipedia.org/wiki/Memoization
-    def collatzMemoized = Memoize2i(collatzSeqSize)
-
-    numbers(1, 1000000).par.map(n => (n, collatzMemoized(n, 1))).maxBy(_._2)
+    numbers(1, 1000000).par.map(n => (n, collatzSeqSize(n, 1))).maxBy(_._2)
   }
 }
 
