@@ -3,6 +3,37 @@ package net.projecteuler.ediweissmann
 import annotation.tailrec
 
 /*
+If the numbers 1 to 5 are written out in words: one, two, three, four, five, then there are 3 + 3 + 5 + 4 + 4 = 19 letters used in total.
+
+If all the numbers from 1 to 1000 (one thousand) inclusive were written out in words, how many letters would be used?
+
+NOTE: Do not count spaces or hyphens. For example, 342 (three hundred and forty-two) contains 23 letters and 115 (one hundred and fifteen) contains 20 letters.
+The use of "and" when writing out numbers is in compliance with British usage.
+ */
+object P17 extends Solvable {
+
+  def solve() = {
+    val twenties = Seq("", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
+      "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen")
+
+    val tensOf = Seq("", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety")
+
+    def spell(n: Int): String = n match {
+      case x if x < 20 => twenties(x)
+      case x if x < 100 => tensOf(x / 10) + " " + twenties(x % 10)
+      case x if x < 1000 => twenties(x / 100) + " " + "hundred " + {
+        if (x % 100 != 0) " and " + spell(x % 100) else ""
+      }
+      case 1000 => "one thousand"
+    }
+
+    def spelledSize(n: Int) = spell(n).replaceAll(" ", "").size
+
+    (1 to 1000).map(spelledSize).sum
+  }
+}
+
+/*
 215 = 32768 and the sum of its digits is 3 + 2 + 7 + 6 + 8 = 26.
 
 What is the sum of the digits of the number 2^1000?
