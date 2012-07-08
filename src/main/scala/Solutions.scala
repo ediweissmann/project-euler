@@ -2,6 +2,40 @@ package net.projecteuler.ediweissmann
 
 import annotation.tailrec
 
+/**
+ * How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)?
+ */
+object P19 extends Solvable {
+
+  def solve() = {
+
+    /**
+     * http://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week
+     */
+    def gaussianDayOfWeek(day: Int, month: Int, y: Int, c: Int) = (day + math.floor(2.6 * month - 0.2) + y + math.floor(y / 4) + math.floor(c / 4) - 2 * c) % 7
+
+    /**
+     * Adapter to Gaussian algorithm counting conventions
+     */
+    def dayOfWeek(day: Int, month: Int, year: Int) = {
+      val shiftedMonth = (month + 9) % 12 + 1
+      val shiftedYear = month match {
+        case x if x < 3 => year - 1
+        case _ => year
+      }
+
+      gaussianDayOfWeek(day, shiftedMonth, shiftedYear % 100, shiftedYear / 100)
+    }
+
+    val monthsWithFirstDaySunday = for (val year <- (1901 to 2000);
+                                        val month <- (1 to 12)
+                                        if dayOfWeek(1, month, year) == 0
+    ) yield (month, year)
+
+    monthsWithFirstDaySunday.size
+  }
+}
+
 /*
 By starting at the top of the triangle below and moving to adjacent numbers on the row below, the maximum total from top to bottom is 23.
 
