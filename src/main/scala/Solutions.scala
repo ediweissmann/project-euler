@@ -3,6 +3,18 @@ package net.projecteuler.ediweissmann
 import annotation.tailrec
 
 /*
+215 = 32768 and the sum of its digits is 3 + 2 + 7 + 6 + 8 = 26.
+
+What is the sum of the digits of the number 2^1000?
+ */
+object P16 extends Solvable {
+
+  def solve() = {
+    BigInt(2).pow(1000).toString.map(_.asDigit).sum
+  }
+}
+
+/*
 Starting in the top left corner of a 22 grid, there are 6 routes (without backtracking, going only right or down)
 to the bottom right corner.
 How many routes are there through a 2020 grid?
@@ -177,7 +189,7 @@ object P13 extends Solvable {
         .lines.map(l => BigInt(l.trim))
 
 
-    in.reduce(_ + _).toString.take(10)
+    in.sum.toString.take(10)
   }
 }
 
@@ -340,7 +352,7 @@ object P10 extends Solvable {
   val TWO_MILLION = 2 * 1000000
 
   def solve() = {
-    probablePrimesTo(TWO_MILLION) reduce (_ + _)
+    probablePrimesTo(TWO_MILLION) sum
   }
 }
 
