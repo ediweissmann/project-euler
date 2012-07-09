@@ -462,22 +462,14 @@ object P11 extends Solvable {
  */
 object P10 extends Solvable {
 
-  import Primes._
+  implicit def b2B(b: BigInt) = b.bigInteger
+  implicit def B2b(b: java.math.BigInteger) = new BigInt(b)
+
+  def probablePrimes(n: BigInt = 1): Stream[BigInt] = Stream.cons(n, probablePrimes(n.nextProbablePrime))
 
   val TWO_MILLION = 2 * 1000000
 
   def solve() = {
-    probablePrimesTo(TWO_MILLION) sum
+    probablePrimes() takeWhile (_ <= TWO_MILLION) sum
   }
-}
-
-object Primes {
-
-  import Conversions._
-
-  def probablePrimes() = probablePrimesFrom(1)
-
-  def probablePrimesFrom(n: BigInt): Stream[BigInt] = Stream.cons(n, probablePrimesFrom(n.nextProbablePrime))
-
-  def probablePrimesTo(n: BigInt): Stream[BigInt] = probablePrimes() takeWhile (_ <= n)
 }

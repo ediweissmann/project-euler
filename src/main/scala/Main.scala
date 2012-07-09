@@ -25,11 +25,3 @@ object Main {
   c.getField("MODULE$").get(c).asInstanceOf[Solvable]
   }
 }
-
-object Conversions {
-  // conversions from BigInt to BigInteger
-  implicit def b2B(b: BigInt) = b.bigInteger
-  implicit def B2b(b: java.math.BigInteger) = new BigInt(b)
-
-  implicit def i2b(i: Int) = BigInt(i)
-}
