@@ -172,8 +172,6 @@ NOTE: Once the chain starts the terms are allowed to go above one million.
  */
 object P14 extends Solvable {
 
-  import Numbers._
-
   def solve() = {
 
     /*
@@ -188,7 +186,7 @@ object P14 extends Solvable {
       }
     }
 
-    numbers(1, 1000000).par.map(n => (n, collatzSeqSize(n, 1))).maxBy(_._2)
+    (1 to 1000000).par.map(n => (n, collatzSeqSize(n, 1))).maxBy(_._2)
   }
 }
 
@@ -467,11 +465,6 @@ object P10 extends Solvable {
   def solve() = {
     probablePrimesTo(TWO_MILLION) sum
   }
-}
-
-object Numbers {
-
-  def numbers(from: Int, to: Int): Stream[Int] = Stream.cons(from, if (from == to) Stream.empty else numbers(from + 1, to))
 }
 
 object TriangleNumbers {
