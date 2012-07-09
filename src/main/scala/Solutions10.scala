@@ -324,10 +324,14 @@ What is the value of the first triangle number to have over five hundred divisor
  */
 object P12 extends Solvable {
 
-  import TriangleNumbers._
-  import Factors._
-
   def solve() = {
+
+    // all factors (not just prime) including 1 and self
+    def factors(n: BigInt) = 1.until(scala.math.sqrt(n.toInt).toInt + 1).par.filter(n % _ == 0).map(i => Seq(i, n / i)).flatten.toSet
+
+    // stream of triangle numbers
+    def triangleNumbers(n: Int = 1, sum: Int = 0): Stream[BigInt] = Stream.cons(n + sum, triangleNumbers(n + 1, n + sum))
+
     triangleNumbers() find (factors(_).size > 500)
   }
 }
@@ -465,17 +469,6 @@ object P10 extends Solvable {
   def solve() = {
     probablePrimesTo(TWO_MILLION) sum
   }
-}
-
-object TriangleNumbers {
-  def triangleNumbers(): Stream[BigInt] = triangleNumbers(1)
-
-  private def triangleNumbers(n: Int, sum: Int = 0): Stream[BigInt] = Stream.cons(n + sum, triangleNumbers(n + 1, n + sum))
-}
-
-object Factors {
-
-  def factors(n: BigInt) = 1.until(scala.math.sqrt(n.toInt).toInt + 1).par.filter(n % _ == 0).map(i => Seq(i, n / i)).flatten.toSet
 }
 
 object Primes {
