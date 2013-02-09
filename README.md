@@ -1,4 +1,4 @@
-Scala solutions to projecteuler.net problems
+Learning Scala by solving projecteuler.net problems
 =============
 
 To run a problem (eg: P11):
