@@ -3,6 +3,21 @@ package net.projecteuler.ediweissmann
 import math._
 import io.Source
 
+object P23 extends Solvable {
+
+  import Divisors.divisors
+
+  def solve() = {
+    def isAbundant(n:Int) = divisors(n).sum > n
+
+    val abundants = (1 to 28123).par.filter(isAbundant(_)).toList
+
+    def isSumOfAbundants(n:Int) = abundants.find(p => abundants.contains(n - p)).isDefined
+
+    (1 to 28123).par.filter(isSumOfAbundants(_))
+  }
+}
+
 /*
 Using names.txt, a 46K text file containing over five-thousand first names, begin by sorting it into alphabetical order. Then working out the alphabetical value for each name, multiply this value by its alphabetical position in the list to obtain a name score.
 
@@ -34,10 +49,9 @@ Evaluate the sum of all the amicable numbers under 10000.
  */
 object P21 extends Solvable {
 
-  def solve() = {
+  import Divisors.divisors
 
-    def divisors(n: Int) = 1.until(sqrt(n.toDouble).toInt + 1).par
-      .filter(n % _ == 0).map(i => Seq(i, n / i)).flatten.toSet - n // remove itself but keep 1
+  def solve() = {
 
     // sum of divisors
     def d(n: Int): Int = divisors(n).sum
@@ -72,4 +86,10 @@ object P20 extends Solvable {
 
     factorial(100).toString.map(_.asDigit).sum
   }
+}
+
+object Divisors {
+
+  def divisors(n: Int) = 1.until(sqrt(n.toDouble).toInt + 1).par
+    .filter(n % _ == 0).map(i => Seq(i, n / i)).flatten.toSet - n // remove itself but keep 1
 }
